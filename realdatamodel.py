@@ -32,20 +32,31 @@ def generate_training_outputs(file_name: str) -> list:
         training_output = row[0]
         training_outputs.append(training_output)
   return training_outputs
-  
+
+def predict(predictor, test_set: list):
+  outcome = predictor.predict(X=test_set)
+  coefficients = predictor.coef_
+  print('Predictions:', outcome)
+  print('Coefficients:', coefficients)
+
 
 def main():
   # Generate two output and input list from the csv file
   training_inputs_list = generate_training_inputs('SeoulBikeData.csv')
   training_outputs_list = generate_training_outputs('SeoulBikeData.csv')
+
   # Split the training input list into two list, training containing the first 80%, the remaining 20% are test
   training_inputs = training_inputs_list[0:int((len(training_inputs_list) - 1) * 0.8)]
   test_inputs = training_inputs_list[int((len(training_inputs_list) - 1) * 0.8) + 1:len(training_inputs_list)]
+
   # Split the training output list into two list, training containing the first 80%, the remaining 20% are test
   training_outputs = training_outputs_list[0:int((len(training_outputs_list) - 1) * 0.8)]
   test_outputs = training_outputs_list[int((len(training_outputs_list) - 1) * 0.8) + 1:len(training_outputs_list)]
 
-
+  # Dit con me thang loz Do. Actually training the model.
+  predictor = LinearRegression(n_jobs=-1)
+  predictor.fit(X=training_inputs, y=training_outputs)
+  predict(predictor, test_inputs)
 
 
 main()
